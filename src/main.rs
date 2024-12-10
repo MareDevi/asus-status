@@ -1,6 +1,6 @@
 use clap::Parser;
 use serde::Serialize;
-use asus_status::{get_graphics_mode, get_profile_info, Opts, SubCommand};
+use asus_status::{get_graphics_mode, get_profile_info, set_to_next_profile, Opts, SubCommand, ProfileSubCommand};
 
 #[derive(Debug, Serialize)]
 struct Profile {
@@ -25,10 +25,17 @@ fn main() {
     let mut info: Option<Info> = None;
 
     match opts.cmd {
-        SubCommand::Profile(_profile_opts) => {
-            profile = Some(Profile {
-                text: "󰚗 :".to_owned() + &get_profile_info()[2],
-            });
+        SubCommand::Profile(profile_opts) => {
+            match profile_opts.profile_subcommand {
+                ProfileSubCommand::Get => {
+                    profile = Some(Profile {
+                        text: "󰚗 :".to_owned() + &get_profile_info()[2],
+                    });
+                },
+                ProfileSubCommand::Set => {
+                    set_to_next_profile();
+                },
+            }
         },
         SubCommand::Graphics(_graphics_opts) => {
             graphics = Some(Graphics {

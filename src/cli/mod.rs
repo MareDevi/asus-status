@@ -1,9 +1,10 @@
 use clap::{command, Parser};
-use graphics::GraphicsOpts;
-use profile::ProfileOpts;
 
-pub mod profile;
-pub mod graphics;
+mod profile;
+mod graphics;
+
+pub use profile::*;
+pub use graphics::*;
 
 #[derive(Debug, Parser)]
 pub struct Opts {
