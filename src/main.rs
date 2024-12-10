@@ -1,6 +1,6 @@
 use clap::Parser;
 use serde::Serialize;
-use asus_status::{get_graphics_mode, get_profile_info, set_to_next_profile, Opts, SubCommand, ProfileSubCommand};
+use asus_status::{get_graphics_mode, get_profile_info, set_to_next_graphics_mode, set_to_next_profile, GraphicsSubCommand, Opts, ProfileSubCommand, SubCommand};
 
 #[derive(Debug, Serialize)]
 struct Profile {
@@ -37,10 +37,17 @@ fn main() {
                 },
             }
         },
-        SubCommand::Graphics(_graphics_opts) => {
-            graphics = Some(Graphics {
-                text: "󰿠 :".to_owned() + &get_graphics_mode(),
-            });
+        SubCommand::Graphics(graphics_opts) => {
+            match graphics_opts.graphics_subcommand {
+                GraphicsSubCommand::Get => {
+                    graphics = Some(Graphics {
+                        text: "󰿠 :".to_owned() + &get_graphics_mode(),
+                    });
+                },
+                GraphicsSubCommand::Set => {
+                    set_to_next_graphics_mode();
+                },
+            }
         },
         SubCommand::Info => {
             info = Some(Info {
